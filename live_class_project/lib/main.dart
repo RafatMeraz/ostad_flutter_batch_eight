@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-// reformat
-// ctl + shift + l // cmd + shift + l
-
-// suggestion
-// ctl + space
-
-// var, dynamic
+// Image(asset, network), Column, Row
 
 void main() {
   runApp(HelloWorldApp());
@@ -19,28 +13,94 @@ class HelloWorldApp extends StatelessWidget {
       debugShowCheckedModeBanner: true,
       title: 'Hello World App',
       home: Scaffold(
-        backgroundColor: Colors.yellow,
         appBar: AppBar(
           title: Text('Home'),
           centerTitle: true,
         ),
-        body: Center(
-          child: Text(
-            'Hello World we are writing our first application code with flutter',
-            textAlign: TextAlign.justify,
-            maxLines: 1,
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.red,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.8,
-              height: 1.5,
-              // backgroundColor: Colors.black,
-              wordSpacing: 1,
-              // decoration: TextDecoration.lineThrough,
-              overflow: TextOverflow.ellipsis,
+        // body: Image.asset(
+        //   'assets/images/shoe.jpg',
+        //   width: 300,
+        //   height: 400,
+        //   fit: BoxFit.scaleDown,
+        //   // color: Colors.red.shade50,
+        //   alignment: Alignment.bottomCenter,
+        // ),
+        // body: Image.network(
+        //   'https://t3.ftcdn.net/jpg/06/12/00/18/360_F_612001823_TkzT0xmIgagoDCyQ0yuJYEGu8j6VNVYT.jpg',
+        //   width: 200,
+        //   height: 300,
+        //   fit: BoxFit.cover,
+        // ),
+        /*body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Hello'),
+            Text('World'),
+            Image.network(
+              'https://t3.ftcdn.net/jpg/06/12/00/18/360_F_612001823_TkzT0xmIgagoDCyQ0yuJYEGu8j6VNVYT.jpg',
+              width: 350,
+              height: 300,
+              fit: BoxFit.cover,
             ),
-          ),
+            Text('This is a shoe image'),
+            Text('sjfdkk'),
+          ],
+        ),*/
+        /*body: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Hello'),
+            Text('Another'),
+            Text('World'),
+            Image.network(
+              'https://t3.ftcdn.net/jpg/06/12/00/18/360_F_612001823_TkzT0xmIgagoDCyQ0yuJYEGu8j6VNVYT.jpg',
+              width: 100,
+              fit: BoxFit.cover,
+            ),
+            Text('Shoe')
+          ],
+        ),*/
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Hello world'),
+            Row(
+              children: [
+                Text('Hello'),
+                Text('World'),
+                Image.network(
+                  'https://t3.ftcdn.net/jpg/06/12/00/18/360_F_612001823_TkzT0xmIgagoDCyQ0yuJYEGu8j6VNVYT.jpg',
+                  width: 100,
+                  fit: BoxFit.cover,
+                ),
+                Text('This is a shoe image'),
+                Text('sjfdkk'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Image.network(
+                  'https://t3.ftcdn.net/jpg/06/12/00/18/360_F_612001823_TkzT0xmIgagoDCyQ0yuJYEGu8j6VNVYT.jpg',
+                  width: 100,
+                  fit: BoxFit.cover,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text('This'),
+                    Text('is'),
+                    Text('Nike new version'),
+                  ],
+                )
+              ],
+            )
+          ],
         ),
       ),
     );
