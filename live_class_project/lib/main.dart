@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Divider, ModalBottomSheet, TextField
+// Drawer, NavigationBar, Bottom Navigation bar, SingleChildScrollView, ScrollBar, ListView, ListViewBuilder
 
 void main() {
   runApp(HelloWorldApp());
@@ -18,7 +18,23 @@ class HelloWorldApp extends StatelessWidget {
 }
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  Home({super.key});
+
+  List<String> friendList = [
+    'Iram',
+    'Shabbin',
+    'Rakib',
+    'Hasan',
+    'Roy',
+    'Niloy',
+    'Niloy',
+    'Niloy',
+    'Niloy',
+    'Niloy',
+    'Niloy',
+    'Niloy',
+    'Niloy',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -26,116 +42,162 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
         backgroundColor: Colors.green,
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+          // IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+        ],
+        // leading: Icon(Icons.add),
       ),
-      body: Center(
+      drawer: Drawer(
+        shadowColor: Colors.red,
+        backgroundColor: Colors.white54,
+        width: 300,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [Text('dfsdf')],
+        ),
+      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   currentIndex: 0,
+      //   selectedItemColor: Colors.pink,
+      //   unselectedItemColor: Colors.blue,
+      //   unselectedFontSize: 12,
+      //   showUnselectedLabels: false,
+      //   showSelectedLabels: true,
+      //   onTap: (int selectedIndex) {
+      //     // TODO: have to change state, will see after stateful widget
+      //   },
+      //   items: [
+      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+      //   ],
+      // ),
+      bottomNavigationBar: NavigationBar(
+          selectedIndex: 1,
+          onDestinationSelected: (int selectedIndex) {
+            // TODO: have to change state, will see after stateful widget
+          },
+          destinations: [
+            NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
+            NavigationDestination(icon: Icon(Icons.search), label: 'Search'),
+          ]),
+      /*body: Scrollbar(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+              Text('sdfdsfd'),
+            ],
+          ),
+        ),
+      ),*/
+      body: Scrollbar(
+        thickness: 10,
+        radius: Radius.circular(10),
+        interactive: true,
+        /* child: ListView(
+          scrollDirection: Axis.vertical,
+          reverse: false,
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           children: [
-            SizedBox(height: 100),
-            ElevatedButton(
-              onPressed: () {
-                // showAboutDialog(context: context);
-                showModalBottomSheet(
-                  // barrierColor: Colors.grey.shade50,
-                  // backgroundColor: Colors.green.shade200,
-                  context: context,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  enableDrag: false,
-                  builder: (ctx) {
-                    return Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Title',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          height: 20,
-                          thickness: 4,
-                        ),
-                        Text('Sample'),
-                        Row(
-                          children: [
-                            ElevatedButton(
-                                onPressed: () {}, child: Text('Cancel')),
-                            ElevatedButton(
-                                onPressed: () {}, child: Text('Save')),
-                          ],
-                        )
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Text('Show dialog'),
-            ),
-            SizedBox(height: 24),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: TextField(
-                maxLength: 50,
-                onChanged: (String? value) {
-                  print(value);
-                },
-                controller: TextEditingController(),
-                // obscureText: true,
-                maxLines: 1,
-                keyboardType: TextInputType.phone,
-                enabled: true,
-                decoration: InputDecoration(
-                  hintText: 'Phone',
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade400,
-                  ),
-                  labelText: 'Phone number',
-                  // label: Icon(Icons.add),
-                  prefixIcon: Icon(Icons.phone),
-                  suffixIcon: Icon(Icons.person),
-                  fillColor: Colors.white54,
-                  filled: true,
-                  // counterStyle: TextStyle(
-                  //   fontSize: 24
-                  // ),
-                  // counterText: '',
-                  // prefix: Column(
-                  //   children: [
-                  //     Text('d'),
-                  //     Text('b'),
-                  //   ],
-                  // ),
-                  // suffix: Column(
-                  //   children: [
-                  //     Text('d'),
-                  //     Text('b'),
-                  //   ],
-                  // ),
-                  // icon: IconButton(onPressed: () {}, icon: Icon(Icons.add)),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red)),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2),
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey, width: 4),
-                  ),
-                ),
-              ),
-            ),
+            Text('first'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('sdfdsfd'),
+            Text('last'),
           ],
+        ),*/
+        /* child: ListView.builder(
+          itemCount: 100, // 100-1 = 99 => 0 -> 99
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          itemBuilder: (context, index) {
+            return Text('item $index');
+          },
+        ),*/
+        child: ListView.builder(
+          itemCount: friendList.length, // 5 (0-4)
+          itemBuilder: (BuildContext context, int index) {
+            return Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(friendList[index]),
+            );
+          },
         ),
       ),
     );
