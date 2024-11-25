@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:live_class_project/screens/todo.dart';
+import 'package:live_class_project/models/todo.dart';
 
 class UpdateTodoScreen extends StatefulWidget {
   const UpdateTodoScreen({
     super.key,
-    required this.todo,
+    required this.todoToBeUpdate,
     required this.onUpdateTodo,
   });
 
-  final Todo todo;
+  final Todo todoToBeUpdate;
   final Function(Todo) onUpdateTodo;
 
   @override
@@ -24,8 +24,8 @@ class _UpdateTodoScreenState extends State<UpdateTodoScreen> {
   @override
   void initState() {
     super.initState();
-    _titleTEController.text = widget.todo.title;
-    _descriptionTEController.text = widget.todo.description;
+    _titleTEController.text = widget.todoToBeUpdate.title;
+    _descriptionTEController.text = widget.todoToBeUpdate.description;
   }
 
   @override
@@ -74,7 +74,7 @@ class _UpdateTodoScreenState extends State<UpdateTodoScreen> {
                     if (_formKey.currentState!.validate()) {
                       Todo todo = Todo(title: _titleTEController.text.trim(),
                           description: _descriptionTEController.text.trim(),
-                          status: widget.todo.status
+                          status: widget.todoToBeUpdate.status
                       );
 
                       widget.onUpdateTodo(todo);
