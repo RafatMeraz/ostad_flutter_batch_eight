@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:live_class_project/screens/add_new_todo_screen.dart';
+import 'package:live_class_project/screens/todo.dart';
 import 'package:live_class_project/screens/update_todo_screen.dart';
 
 class TodoListScreen extends StatefulWidget {
@@ -10,79 +11,133 @@ class TodoListScreen extends StatefulWidget {
 }
 
 class _TodoListScreenState extends State<TodoListScreen> {
+  final List<Todo> listOfTodo = [];
+
+  void _addTodo(Todo todo) {
+    listOfTodo.add(todo);
+    setState(() {});
+  }
+
+  void _deleteTodo(int index) {
+    listOfTodo.removeAt(index);
+    setState(() {});
+  }
+
+  void _updateTodo(int index, Todo todo) {
+    listOfTodo[index] = todo;
+    setState(() {});
+  }
+
+  void _updateTodoStatus(int index, TodoStatus status) {
+    listOfTodo[index].status = status;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Todo List'),
       ),
-      body: ListView.builder(
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: const Text('Title of todo'),
-            subtitle: const Text('description'),
-            leading: const Text('Status'),
-            trailing: Wrap(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.delete),
-                ),
-                IconButton(
-                  onPressed: _showChangeStatusDialog,
-                  icon: const Icon(Icons.edit),
-                ),
-              ],
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const UpdateTodoScreen()),
-              );
-            },
-          );
-        },
+      body: Visibility(
+        visible: listOfTodo.isNotEmpty,
+        replacement: const Center(
+          child: Text('Empty list'),
+        ),
+        child: ListView.builder(
+          itemCount: listOfTodo.length,
+          itemBuilder: (context, index) {
+            Todo todo = listOfTodo[index];
+            return ListTile(
+              title: Text(todo.title),
+              subtitle: Text(todo.description),
+              leading: Text(todo.status.name),
+              trailing: Wrap(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      _deleteTodo(index);
+                    },
+                    icon: const Icon(Icons.delete),
+                  ),
+                  IconButton(
+                    onPressed: () => _showChangeStatusDialog(index),
+                    icon: const Icon(Icons.edit),
+                  ),
+                ],
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UpdateTodoScreen(
+                      todo: todo,
+                      onUpdateTodo: (Todo updatedTodo) {
+                        _updateTodo(index, updatedTodo);
+                      },
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          Todo? todo = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const AddNewTodoScreen(),
             ),
           );
+          if (todo != null) {
+            _addTodo(todo);
+          }
         },
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  void _showChangeStatusDialog() {
+  void _showChangeStatusDialog(int index) {
     showDialog(
       context: context,
       builder: (context) {
-        return const AlertDialog(
-          title: Text('Change Status'),
+        return AlertDialog(
+          title: const Text('Change Status'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('Idle'),
+                title: const Text('Idle'),
+                onTap: () {
+                  _onTapUpdateStatusButton(index, TodoStatus.idle);
+                },
               ),
-              Divider(height: 0),
+              const Divider(height: 0),
               ListTile(
-                title: Text('In Progress'),
+                title: const Text('In Progress'),
+                onTap: () {
+                  _onTapUpdateStatusButton(index, TodoStatus.inProgress);
+                },
               ),
-              Divider(height: 0),
+              const Divider(height: 0),
               ListTile(
-                title: Text('Done'),
+                title: const Text('Done'),
+                onTap: () {
+                  _onTapUpdateStatusButton(index, TodoStatus.done);
+                },
               ),
             ],
           ),
         );
       },
     );
+  }
+
+  void _onTapUpdateStatusButton(int index, TodoStatus status) {
+    _updateTodoStatus(index, status);
+    Navigator.pop(context);
   }
 }
