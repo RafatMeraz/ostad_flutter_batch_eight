@@ -10,7 +10,10 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      // leading: Image.network(product.image ?? ''),
+      leading: Image.network(
+        product.image ?? '',
+        width: 40,
+      ),
       title: Text(product.productName ?? 'Unknown'),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,10 +26,16 @@ class ProductItem extends StatelessWidget {
       ),
       trailing: Wrap(
         children: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.delete)),
+          IconButton(onPressed: () {
+            // TODO: implement delete product api
+          }, icon: const Icon(Icons.delete)),
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, UpdateProductScreen.name);
+              Navigator.pushNamed(
+                context,
+                UpdateProductScreen.name,
+                arguments: product,
+              );
             },
             icon: const Icon(Icons.edit),
           ),
