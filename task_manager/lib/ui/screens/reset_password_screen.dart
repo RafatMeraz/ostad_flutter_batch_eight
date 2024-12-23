@@ -1,22 +1,23 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:task_manager/ui/screens/forgot_password_verify_otp_screen.dart';
+import 'package:task_manager/ui/screens/sign_in_screen.dart';
 import 'package:task_manager/ui/utils/app_colors.dart';
 import 'package:task_manager/ui/widgets/screen_background.dart';
 
-class ForgotPasswordVerifyEmailScreen extends StatefulWidget {
-  const ForgotPasswordVerifyEmailScreen({super.key});
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({super.key});
 
-  static const String name = '/forgot-password/verify-email';
+  static const String name = '/forgot-password/reset-password';
 
   @override
-  State<ForgotPasswordVerifyEmailScreen> createState() =>
-      _ForgotPasswordVerifyEmailScreenState();
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
-class _ForgotPasswordVerifyEmailScreenState
-    extends State<ForgotPasswordVerifyEmailScreen> {
-  final TextEditingController _emailTEController = TextEditingController();
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+  final TextEditingController _newPasswordTEController =
+      TextEditingController();
+  final TextEditingController _confirmPasswordTEController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -34,25 +35,27 @@ class _ForgotPasswordVerifyEmailScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 80),
-                  Text('Your Email Address', style: textTheme.titleLarge),
+                  Text('Set Password', style: textTheme.titleLarge),
                   const SizedBox(height: 4),
                   Text(
-                    'A 6 digits of OTP will be sent to your email address',
+                    'Minimum length of password should be more than 8 letters.',
                     style: textTheme.titleSmall,
                   ),
                   const SizedBox(height: 24),
                   TextFormField(
-                    controller: _emailTEController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(hintText: 'Email'),
+                    controller: _newPasswordTEController,
+                    decoration: const InputDecoration(hintText: 'New Password'),
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: _confirmPasswordTEController,
+                    decoration:
+                        const InputDecoration(hintText: 'Confirm New Password'),
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                          context, ForgotPasswordVerifyOtpScreen.name);
-                    },
-                    child: const Icon(Icons.arrow_circle_right_outlined),
+                    onPressed: () {},
+                    child: const Text('Confirm'),
                   ),
                   const SizedBox(height: 48),
                   Center(
@@ -81,7 +84,8 @@ class _ForgotPasswordVerifyEmailScreenState
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(
+                    context, SignInScreen.name, (value) => false);
               },
           )
         ],
@@ -91,7 +95,8 @@ class _ForgotPasswordVerifyEmailScreenState
 
   @override
   void dispose() {
-    _emailTEController.dispose();
+    _newPasswordTEController.dispose();
+    _confirmPasswordTEController.dispose();
     super.dispose();
   }
 }
