@@ -3,7 +3,8 @@ import 'package:task_manager/data/models/task_model.dart';
 
 class TaskItemWidget extends StatelessWidget {
   const TaskItemWidget({
-    super.key, required this.taskModel,
+    super.key,
+    required this.taskModel,
   });
 
   final TaskModel taskModel;
@@ -27,11 +28,12 @@ class TaskItemWidget extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.blue),
-                  child: const Text(
-                    'New',
-                    style: TextStyle(
+                    borderRadius: BorderRadius.circular(16),
+                    color: _getStatusColor(taskModel.status ?? 'New'),
+                  ),
+                  child: Text(
+                    taskModel.status ?? 'New',
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
@@ -54,5 +56,17 @@ class TaskItemWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color _getStatusColor(String status) {
+    if (status == 'New') {
+      return Colors.blue;
+    } else if (status == 'Progress') {
+      return Colors.yellow;
+    } else if (status == 'Cancelled') {
+      return Colors.red;
+    } else {
+      return Colors.green;
+    }
   }
 }
