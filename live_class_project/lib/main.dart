@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:live_class_project/controller_binder.dart';
+import 'package:live_class_project/counter_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
           return routeWidget;
         });
       },
+      initialBinding: ControllerBinder(),
     );
   }
 }
@@ -39,7 +42,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  RxInt count = 0.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
           child: Column(
         children: [
-          Obx(() {
-            return Text(
-              count.toString(),
-              style: const TextStyle(fontSize: 32),
-            );
-          }),
+          GetBuilder<CounterController>(
+            builder: (controller) {
+              return Text(
+                controller.count.toString(),
+                style: const TextStyle(fontSize: 32),
+              );
+            },
+          ),
           TextButton(
             onPressed: () {
               // Navigator.push(
@@ -61,15 +65,15 @@ class _HomeScreenState extends State<HomeScreen> {
               //   MaterialPageRoute(builder: (context) => const SettingsScreen()),
               // );
               // Get.to(const SettingsScreen());
-              Get.toNamed('/settings');
+              Get.toNamed('/profile');
             },
-            child: const Text('Go to Settings'),
+            child: const Text('Go to Profile'),
           )
         ],
       )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          count.value++;
+          Get.find<CounterController>().increment();
         },
         child: const Icon(Icons.add),
       ),
@@ -77,16 +81,34 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
   @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  // TODO: solve this issue
+  CounterController counterControllerTwo = CounterController();
+
+  @override
   Widget build(BuildContext context) {
+    print(counterControllerTwo.hashCode);
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: Center(
         child: Column(
           children: [
+            GetBuilder(
+              init: counterControllerTwo,
+              builder: (controller) {
+                return Text(
+                  controller.count.toString(),
+                  style: const TextStyle(fontSize: 32),
+                );
+              },
+            ),
             TextButton(
               onPressed: () {
                 // Navigator.pushReplacement(
@@ -110,6 +132,12 @@ class SettingsScreen extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          counterControllerTwo.increment();
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
@@ -124,6 +152,14 @@ class ProfileScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
+            GetBuilder<CounterController>(
+              builder: (controller) {
+                return Text(
+                  controller.count.toString(),
+                  style: const TextStyle(fontSize: 32),
+                );
+              },
+            ),
             TextButton(
               onPressed: () {
                 // Navigator.pushAndRemoveUntil(
@@ -138,6 +174,12 @@ class ProfileScreen extends StatelessWidget {
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.find<CounterController>().increment();
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
