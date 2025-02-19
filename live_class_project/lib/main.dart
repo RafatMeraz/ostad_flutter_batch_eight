@@ -1,9 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:live_class_project/controller_binder.dart';
-import 'package:live_class_project/counter_controller.dart';
+import 'package:live_class_project/score.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -12,174 +17,80 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      initialRoute: '/',
-      onGenerateRoute: (RouteSettings settings) {
-        late Widget routeWidget;
-
-        if (settings.name == '/') {
-          routeWidget = const HomeScreen();
-        } else if (settings.name == '/profile') {
-          routeWidget = const ProfileScreen();
-        } else if (settings.name == '/settings') {
-          routeWidget = const SettingsScreen();
-        }
-
-        return MaterialPageRoute(builder: (context) {
-          return routeWidget;
-        });
-      },
-      initialBinding: ControllerBinder(),
+    return const MaterialApp(
+      home: LiveScoreListScreen(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class LiveScoreListScreen extends StatefulWidget {
+  const LiveScoreListScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<LiveScoreListScreen> createState() => _LiveScoreListScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _LiveScoreListScreenState extends State<LiveScoreListScreen> {
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  final List<FootballScore> _footballScoreList = [];
+  bool _getFootScoreInProgress = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _getLiveScoreList();
+  }
+
+  Future<void> _getLiveScoreList() async {
+    _getFootScoreInProgress = true;
+    setState(() {});
+    _footballScoreList.clear();
+    QuerySnapshot<Map<String, dynamic>> snapshots =
+        await db.collection('football').get();
+    for (QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshots.docs) {
+      _footballScoreList.add(FootballScore.fromJson(doc.data(), doc.id));
+    }
+    _getFootScoreInProgress = false;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      body: Center(
-          child: Column(
-        children: [
-          GetBuilder<CounterController>(
-            builder: (controller) {
-              return Text(
-                controller.count.toString(),
-                style: const TextStyle(fontSize: 32),
-              );
-            },
-          ),
-          TextButton(
-            onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const SettingsScreen()),
-              // );
-              // Get.to(const SettingsScreen());
-              Get.toNamed('/profile');
-            },
-            child: const Text('Go to Profile'),
-          )
-        ],
-      )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.find<CounterController>().increment();
-        },
-        child: const Icon(Icons.add),
+      appBar: AppBar(
+        title: const Text('Score List'),
       ),
-    );
-  }
-}
-
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
-
-  @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  // TODO: solve this issue
-  CounterController counterControllerTwo = CounterController();
-
-  @override
-  Widget build(BuildContext context) {
-    print(counterControllerTwo.hashCode);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
-      body: Center(
-        child: Column(
-          children: [
-            GetBuilder(
-              init: counterControllerTwo,
-              builder: (controller) {
-                return Text(
-                  controller.count.toString(),
-                  style: const TextStyle(fontSize: 32),
-                );
-              },
-            ),
-            TextButton(
-              onPressed: () {
-                // Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => const ProfileScreen(),
-                //   ),
-                // );
-                // Get.off(const ProfileScreen());
-                Get.offNamed('/profile');
-              },
-              child: const Text('Go to Profile'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Navigator.pop(context);
-                Get.back();
-              },
-              child: const Text('Back'),
-            )
-          ],
+      body: Visibility(
+        visible: _getFootScoreInProgress == false,
+        replacement: const Center(
+          child: CircularProgressIndicator(),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          counterControllerTwo.increment();
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
-      body: Center(
-        child: Column(
-          children: [
-            GetBuilder<CounterController>(
-              builder: (controller) {
-                return Text(
-                  controller.count.toString(),
-                  style: const TextStyle(fontSize: 32),
-                );
-              },
-            ),
-            TextButton(
-              onPressed: () {
-                // Navigator.pushAndRemoveUntil(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                //   (predicate) => false,
-                // );
-                // Get.offAll(const HomeScreen());
-                Get.offAllNamed('/');
-              },
-              child: const Text('Go to Home'),
-            )
-          ],
+        child: ListView.builder(
+          itemCount: _footballScoreList.length,
+          itemBuilder: (context, index) {
+            FootballScore score = _footballScoreList[index];
+            return ListTile(
+              title: Text(score.matchName),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('${score.team1Name} vs ${score.team2Name}'),
+                  if (score.isRunning == false)
+                    Text('Winner team is ${score.winnerTeam}')
+                ],
+              ),
+              trailing: Text(
+                '${score.team1Score}-${score.team2Score}',
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              leading: CircleAvatar(
+                backgroundColor: score.isRunning ? Colors.green : Colors.grey,
+                radius: 8,
+              ),
+            );
+          },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.find<CounterController>().increment();
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "169582136982",
+    "project_id": "ostad-batch-six",
+    "storage_bucket": "ostad-batch-six.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169582136982:android:ad39d9616464b8d766bcb7",
+        "android_client_info": {
+          "package_name": "com.ostad.live_class_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_swAcsg5AZDcC3tWn_n0peRXmYnWaL3A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169582136982:android:53ec3ab1b296b79166bcb7",
+        "android_client_info": {
+          "package_name": "com.seven.lc_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_swAcsg5AZDcC3tWn_n0peRXmYnWaL3A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
