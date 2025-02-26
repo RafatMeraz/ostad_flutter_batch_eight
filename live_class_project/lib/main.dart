@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:live_class_project/fcm_message_service.dart';
 import 'package:live_class_project/score.dart';
 import 'firebase_options.dart';
 
@@ -9,6 +10,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FcmMessageService().initialize();
+  FcmMessageService().onTokenRefresh();
+  print(await FcmMessageService().getFcmToken());
   runApp(const MyApp());
 }
 
