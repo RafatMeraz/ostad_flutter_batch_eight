@@ -1,5 +1,6 @@
 import 'package:ecommerce/core/extensions/localization_extension.dart';
 import 'package:ecommerce/features/auth/ui/widgets/app_logo.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -46,7 +47,10 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  FirebaseCrashlytics.instance.log('Entered sign in button');
+                  throw Exception('My custom error');
+                },
                 child: Text(context.localization.signIn),
               ),
             ],

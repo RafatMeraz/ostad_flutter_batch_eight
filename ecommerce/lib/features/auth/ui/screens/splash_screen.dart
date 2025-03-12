@@ -1,8 +1,8 @@
 import 'package:ecommerce/app/app_configs.dart';
+import 'package:ecommerce/core/extensions/localization_extension.dart';
 import 'package:ecommerce/features/auth/ui/screens/sign_in_screen.dart';
 import 'package:ecommerce/features/auth/ui/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const CircularProgressIndicator(),
             const SizedBox(height: 16),
             Text(
-                '${AppLocalizations.of(context)!.version} ${AppConfigs.currentAppVersion}')
+                '${context.localization.version} ${AppConfigs.currentAppVersion}')
           ],
         ),
       ),
