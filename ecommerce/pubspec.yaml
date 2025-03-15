@@ -19,6 +19,7 @@ dependencies:
   firebase_core: ^3.12.1
   firebase_crashlytics: ^4.3.4
   firebase_analytics: ^11.4.4
+  pin_code_fields: ^8.0.1
 
 dev_dependencies:
   flutter_test:

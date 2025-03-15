@@ -5,17 +5,20 @@ import 'package:ecommerce/features/auth/ui/widgets/app_logo.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class VerifyOtpScreen extends StatefulWidget {
+  const VerifyOtpScreen({super.key});
 
-  static const String name = '/sign-in';
+  static const String name = '/verify-otp-screen';
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<VerifyOtpScreen> createState() => _VerifyOtpScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
+  final TextEditingController _otpTEController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
@@ -30,48 +33,41 @@ class _SignInScreenState extends State<SignInScreen> {
               const AppLogo(),
               const SizedBox(height: 24),
               Text(
-                context.localization.welcomeBack,
+                context.localization.enterYourOtpCode,
                 style: textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
               Text(
-                context.localization.enterYourEmailAndPassword,
+                context.localization.aFourDigitCodeHasBeenSent,
                 style: const TextStyle(color: Colors.grey, fontSize: 16),
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                decoration:
-                    InputDecoration(hintText: context.localization.email),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                obscureText: true,
-                decoration:
-                    InputDecoration(hintText: context.localization.password),
+              PinCodeTextField(
+                length: 4,
+                obscureText: false,
+                animationType: AnimationType.fade,
+                keyboardType: TextInputType.number,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(5),
+                  fieldHeight: 50,
+                  fieldWidth: 50,
+                  activeFillColor: Colors.white,
+                  inactiveFillColor: Colors.white,
+                  selectedFillColor: Colors.white
+                ),
+                animationDuration: const Duration(milliseconds: 300),
+                backgroundColor: Colors.transparent,
+                enableActiveFill: true,
+                controller: _otpTEController,
+                appContext: context,
               ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {},
-                child: Text(context.localization.signIn),
+                child: Text(context.localization.verify),
               ),
               const SizedBox(height: 24),
-              RichText(
-                text: TextSpan(
-                  text: "Don't have an account? ",
-                  style: const TextStyle(
-                      color: Colors.grey, fontWeight: FontWeight.w600),
-                  children: [
-                    TextSpan(
-                      text: 'Sign up',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.themeColor,
-                      ),
-                      recognizer: TapGestureRecognizer()..onTap = _onTapSignUpButton
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
         ),
