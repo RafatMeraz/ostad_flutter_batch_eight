@@ -2,6 +2,7 @@ import 'package:ecommerce/features/auth/ui/screens/sign_in_screen.dart';
 import 'package:ecommerce/features/auth/ui/screens/sign_up_screen.dart';
 import 'package:ecommerce/features/auth/ui/screens/splash_screen.dart';
 import 'package:ecommerce/features/auth/ui/screens/verify_otp_screen.dart';
+import 'package:ecommerce/features/common/ui/screens/main_bottom_nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -15,6 +16,8 @@ class AppRoutes {
       route = const SignUpScreen();
     } else if (settings.name == VerifyOtpScreen.name) {
       route = const VerifyOtpScreen();
+    } else if (settings.name == MainBottomNavBarScreen.name) {
+      route = const MainBottomNavBarScreen();
     }
 
     return MaterialPageRoute(
