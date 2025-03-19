@@ -16,5 +16,8 @@
     "aFourDigitCodeHasBeenSent": "A 4 digits of code has been sent to your email",
     "verify": "Verify",
     "seeAll": "See All",
-    "categories": "Categories"
+    "categories": "Categories",
+    "popular": "Popular",
+    "special": "Special",
+    "sNew": "New"
 }
