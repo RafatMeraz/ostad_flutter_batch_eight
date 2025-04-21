@@ -20,8 +20,13 @@ class NetworkResponse {
 class NetworkCaller {
   final Logger _logger = Logger();
 
-  Future<NetworkResponse> getRequest({required String url}) async {
+  Future<NetworkResponse> getRequest(
+      {required String url, Map<String, dynamic>? queryParams}) async {
     try {
+      url += '?';
+      for (String key in queryParams?.keys ?? {}) {
+        url += '$key=${queryParams![key]}&';
+      }
       Uri uri = Uri.parse(url);
       Map<String, String> headers = {'token': ''};
 
