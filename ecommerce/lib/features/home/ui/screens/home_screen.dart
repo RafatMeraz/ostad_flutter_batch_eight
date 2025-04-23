@@ -75,10 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          ProductCard(),
-          ProductCard(),
-          ProductCard(),
-          ProductCard(),
+          // ProductCard(),
+          // ProductCard(),
+          // ProductCard(),
+          // ProductCard(),
         ],
       ),
     );
