@@ -1,13 +1,18 @@
 import 'package:ecommerce/app/app_colors.dart';
 import 'package:ecommerce/core/extensions/localization_extension.dart';
+import 'package:ecommerce/core/widgets/centered_circular_progress_indicator.dart';
+import 'package:ecommerce/features/products/ui/controllers/product_details_controller.dart';
 import 'package:ecommerce/features/products/ui/widgets/color_picker.dart';
 import 'package:ecommerce/features/products/ui/widgets/increment_decrement_counter_widget.dart';
 import 'package:ecommerce/features/products/ui/widgets/product_image_carousel_slider.dart';
 import 'package:ecommerce/features/products/ui/widgets/size_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key});
+  const ProductDetailsScreen({super.key, required this.productId});
+
+  final String productId;
 
   static const String name = '/product-details';
 
@@ -16,114 +21,140 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  final ProductDetailsController _productDetailsController =
+      ProductDetailsController();
+
+  @override
+  void initState() {
+    super.initState();
+    _productDetailsController.getProductDetails(widget.productId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.localization.productDetails),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const ProductImageCarouselSlider(),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
+      body: GetBuilder(
+          init: _productDetailsController,
+          builder: (controller) {
+            if (controller.inProgress) {
+              return const CenteredCircularProgressIndicator();
+            }
+
+            if (controller.errorMessage != null) {
+              return Center(
+                child: Text(controller.errorMessage!),
+              );
+            }
+
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                        ProductImageCarouselSlider(
+                            imageList: controller.product.photos),
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
                                 children: [
-                                  const Text(
-                                    'Nike 320 2025 new edition',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Row(
-                                        children: [
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                            size: 20,
-                                          ),
-                                          Text('4.2'),
-                                        ],
-                                      ),
-                                      TextButton(
-                                        onPressed: () {},
-                                        child: const Text('Reviews'),
-                                      ),
-                                      Card(
-                                        color: AppColors.themeColor,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(4)),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(4.0),
-                                          child: Icon(
-                                            Icons.favorite_border,
-                                            size: 16,
-                                            color: Colors.white,
-                                          ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          controller.product.title,
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600),
                                         ),
-                                      )
-                                    ],
+                                        Row(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                  size: 20,
+                                                ),
+                                                Text(
+                                                    '${controller.product.rating}'),
+                                              ],
+                                            ),
+                                            TextButton(
+                                              onPressed: () {},
+                                              child: const Text('Reviews'),
+                                            ),
+                                            Card(
+                                              color: AppColors.themeColor,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(4)),
+                                              child: const Padding(
+                                                padding: EdgeInsets.all(4.0),
+                                                child: Icon(
+                                                  Icons.favorite_border,
+                                                  size: 16,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  IncrementDecrementCounterWidget(
+                                    onChange: (int value) {
+                                      print(value);
+                                    },
                                   ),
                                 ],
                               ),
-                            ),
-                            IncrementDecrementCounterWidget(
-                              onChange: (int value) {
-                                print(value);
-                              },
-                            ),
-                          ],
+                              const SizedBox(height: 16),
+                              ColorPicker(
+                                colors: controller.product.colors,
+                                onChange: (selectedColor) {
+                                  print(selectedColor);
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              SizePicker(
+                                sizes: controller.product.sizes,
+                                onChange: (selectedSize) {
+                                  print(selectedSize);
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              const Text(
+                                'Description',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                controller.product.description,
+                                style: const TextStyle(color: Colors.grey),
+                              )
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: 16),
-                        ColorPicker(
-                          colors: const ['Red', 'White', 'Black', 'Pink'],
-                          onChange: (selectedColor) {
-                            print(selectedColor);
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        SizePicker(
-                          sizes: const ['S', 'M', 'L', 'XL'],
-                          onChange: (selectedSize) {
-                            print(selectedSize);
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Description',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          '''Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.''',
-                          style: TextStyle(color: Colors.grey),
-                        )
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          _buildPriceAndAddToCartSection(),
-        ],
-      ),
+                ),
+                _buildPriceAndAddToCartSection(),
+              ],
+            );
+          }),
     );
   }
 

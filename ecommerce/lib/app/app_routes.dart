@@ -26,7 +26,8 @@ class AppRoutes {
       final category = settings.arguments as CategoryModel;
       route = ProductListScreen(category: category);
     } else if (settings.name == ProductDetailsScreen.name) {
-      route = const ProductDetailsScreen();
+      String productId = settings.arguments as String;
+      route = ProductDetailsScreen(productId: productId);
     }
 
     return MaterialPageRoute(
