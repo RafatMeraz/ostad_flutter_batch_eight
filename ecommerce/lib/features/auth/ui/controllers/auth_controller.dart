@@ -44,4 +44,8 @@ class AuthController {
     token = null;
     user = null;
   }
+
+  bool isValidUser() {
+    return token != null;
+  }
 }

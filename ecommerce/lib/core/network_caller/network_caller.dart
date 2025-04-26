@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ecommerce/features/auth/ui/controllers/auth_controller.dart';
+import 'package:get/get.dart' as getx;
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 
@@ -86,6 +88,7 @@ class NetworkCaller {
             statusCode: response.statusCode,
             responseData: decodedResponse);
       } else if (response.statusCode == 401) {
+        await _clearUserData();
         return NetworkResponse(
           isSuccess: false,
           statusCode: response.statusCode,
@@ -128,6 +131,7 @@ class NetworkCaller {
             statusCode: response.statusCode,
             responseData: decodedResponse);
       } else if (response.statusCode == 401) {
+        await _clearUserData();
         return NetworkResponse(
             isSuccess: false, statusCode: response.statusCode);
       } else {
@@ -164,6 +168,7 @@ class NetworkCaller {
             statusCode: response.statusCode,
             responseData: decodedResponse);
       } else if (response.statusCode == 401) {
+        await _clearUserData();
         return NetworkResponse(
             isSuccess: false, statusCode: response.statusCode);
       } else {
@@ -200,6 +205,7 @@ class NetworkCaller {
             statusCode: response.statusCode,
             responseData: decodedResponse);
       } else if (response.statusCode == 401) {
+        await _clearUserData();
         return NetworkResponse(
             isSuccess: false, statusCode: response.statusCode);
       } else {
@@ -223,5 +229,9 @@ class NetworkCaller {
   void _logResponse(String url, Response response) {
     _logger.i(
         "URL => $url\nStatus Code: ${response.statusCode}\nHeaders: ${response.headers}\nBody: ${response.body}");
+  }
+
+  Future<void> _clearUserData() async {
+    await getx.Get.find<AuthController>().clearUserData();
   }
 }
