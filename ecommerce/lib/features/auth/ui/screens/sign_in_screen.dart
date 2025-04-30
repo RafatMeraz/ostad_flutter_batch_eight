@@ -1,5 +1,6 @@
 import 'package:ecommerce/app/app_colors.dart';
 import 'package:ecommerce/core/extensions/localization_extension.dart';
+import 'package:ecommerce/core/widgets/centered_circular_progress_indicator.dart';
 import 'package:ecommerce/core/widgets/show_snack_bar_message.dart';
 import 'package:ecommerce/features/auth/data/models/sign_in_request_model.dart';
 import 'package:ecommerce/features/auth/ui/controllers/sign_in_controller.dart';
@@ -63,9 +64,17 @@ class _SignInScreenState extends State<SignInScreen> {
                 InputDecoration(hintText: context.localization.password),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _onTapSignInButton,
-                child: Text(context.localization.signIn),
+              GetBuilder<SignInController>(
+                builder: (controller) {
+                  return Visibility(
+                    visible: controller.inProgress == false,
+                    replacement: const CenteredCircularProgressIndicator(),
+                    child: ElevatedButton(
+                      onPressed: _onTapSignInButton,
+                      child: Text(context.localization.signIn),
+                    ),
+                  );
+                }
               ),
               const SizedBox(height: 24),
               RichText(

@@ -130,19 +130,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 16),
-                            ColorPicker(
-                              colors: controller.product.colors,
-                              onChange: (selectedColor) {
-                                _selectedColor = selectedColor;
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            SizePicker(
-                              sizes: controller.product.sizes,
-                              onChange: (selectedSize) {
-                                _selectedSize = selectedSize;
-                              },
+                            if (controller.product.colors.isNotEmpty)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 16),
+                                  ColorPicker(
+                                    colors: controller.product.colors,
+                                    onChange: (selectedColor) {
+                                      _selectedColor = selectedColor;
+                                    },
+                                  ),
+                                ],
+                              ),
+                            Visibility(
+                              visible: controller.product.sizes.isNotEmpty,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 16),
+                                  SizePicker(
+                                    sizes: controller.product.sizes,
+                                    onChange: (selectedSize) {
+                                      _selectedSize = selectedSize;
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(height: 16),
                             const Text(

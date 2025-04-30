@@ -27,8 +27,10 @@ class _MainBottomNavBarScreenState extends State<MainBottomNavBarScreen> {
   @override
   void initState() {
     super.initState();
-    Get.find<HomeSliderController>().getSliders();
-    Get.find<CategoryController>().getCategoryList();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<HomeSliderController>().getSliders();
+      Get.find<CategoryController>().getCategoryList();
+    });
   }
 
   @override
