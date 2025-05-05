@@ -1,3 +1,5 @@
+import 'package:ecommerce/features/auth/ui/screens/sign_in_screen.dart';
+import 'package:ecommerce/features/cart/ui/screens/cart_list_screen.dart';
 import 'package:ecommerce/features/categories/ui/screens/category_list_screen.dart';
 import 'package:ecommerce/features/common/controllers/category_controller.dart';
 import 'package:ecommerce/features/common/controllers/main_bottom_nav_bar_controller.dart';
@@ -20,7 +22,7 @@ class _MainBottomNavBarScreenState extends State<MainBottomNavBarScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const CategoryListScreen(),
-    const HomeScreen(),
+    const CartListScreen(),
     const WishListScreen(),
   ];
 
@@ -45,7 +47,13 @@ class _MainBottomNavBarScreenState extends State<MainBottomNavBarScreen> {
         builder: (controller) {
           return NavigationBar(
             selectedIndex: controller.selectedIndex,
-            onDestinationSelected: controller.changeIndex,
+            onDestinationSelected: (int index) {
+              if (controller.shouldNavigate(index)) {
+                controller.changeIndex(index);
+              } else {
+                Get.to(() => const SignInScreen());
+              }
+            },
             destinations: const [
               NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
               NavigationDestination(icon: Icon(Icons.category), label: 'Category'),

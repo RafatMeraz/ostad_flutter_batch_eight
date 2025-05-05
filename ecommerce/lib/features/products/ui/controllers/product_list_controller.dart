@@ -1,6 +1,6 @@
 import 'package:ecommerce/app/app_urls.dart';
 import 'package:ecommerce/core/network_caller/network_caller.dart';
-import 'package:ecommerce/features/products/data/models/product_model.dart';
+import 'package:ecommerce/features/common/data/models/product_model.dart';
 import 'package:get/get.dart';
 
 class ProductListController extends GetxController {

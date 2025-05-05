@@ -1,9 +1,8 @@
-import 'package:ecommerce/features/products/data/models/brand_model.dart';
+import 'package:ecommerce/features/common/data/models/brand_model.dart';
 
 class ProductModel {
   final String id;
   final String title;
-  final BrandModel brand;
   final int regularPrice;
   final int currentPrice;
   final double rating;
@@ -16,7 +15,6 @@ class ProductModel {
   ProductModel(
       {required this.id,
       required this.title,
-      required this.brand,
       required this.regularPrice,
       required this.currentPrice,
       required this.rating,
@@ -35,7 +33,6 @@ class ProductModel {
     return ProductModel(
       id: jsonData['_id'],
       title: jsonData['title'],
-      brand: BrandModel.fromJson(jsonData['brand']),
       regularPrice: jsonData['regular_price'] ?? 0,
       currentPrice: jsonData['current_price'],
       rating: jsonData['rating'] ?? 0.0,
