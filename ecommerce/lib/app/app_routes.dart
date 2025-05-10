@@ -2,6 +2,7 @@ import 'package:ecommerce/features/auth/ui/screens/sign_in_screen.dart';
 import 'package:ecommerce/features/auth/ui/screens/sign_up_screen.dart';
 import 'package:ecommerce/features/auth/ui/screens/splash_screen.dart';
 import 'package:ecommerce/features/auth/ui/screens/verify_otp_screen.dart';
+import 'package:ecommerce/features/cart/ui/screens/payment_screen.dart';
 import 'package:ecommerce/features/common/data/models/category_model.dart';
 import 'package:ecommerce/features/common/ui/screens/main_bottom_nav_bar_screen.dart';
 import 'package:ecommerce/features/products/ui/screens/product_details_screen.dart';
@@ -28,6 +29,9 @@ class AppRoutes {
     } else if (settings.name == ProductDetailsScreen.name) {
       String productId = settings.arguments as String;
       route = ProductDetailsScreen(productId: productId);
+    } else if (settings.name == PaymentScreen.name) {
+      double productId = settings.arguments as double;
+      route = PaymentScreen(paymentAmount: productId);
     }
 
     return MaterialPageRoute(
