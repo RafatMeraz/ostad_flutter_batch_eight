@@ -1,26 +1,16 @@
 import 'dart:convert';
 
-import 'package:ecommerce/features/auth/ui/controllers/auth_controller.dart';
-import 'package:get/get.dart' as getx;
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 
-class NetworkResponse {
-  final int statusCode;
-  final Map<String, dynamic>? responseData;
-  final bool isSuccess;
-  final String errorMessage;
-
-  NetworkResponse({
-    required this.isSuccess,
-    required this.statusCode,
-    this.responseData,
-    this.errorMessage = 'Something went wrong!',
-  });
-}
+import 'network_response.dart';
 
 class NetworkCaller {
   final Logger _logger = Logger();
+  final String accessToken;
+  final Function onUnAuthorize;
+
+  NetworkCaller({required this.accessToken, required this.onUnAuthorize});
 
   Future<NetworkResponse> getRequest(
       {required String url, Map<String, dynamic>? queryParams}) async {
@@ -30,7 +20,7 @@ class NetworkCaller {
         url += '$key=${queryParams![key]}&';
       }
       Uri uri = Uri.parse(url);
-      Map<String, String> headers = {'token': getx.Get.find<AuthController>().token ?? ''};
+      Map<String, String> headers = {'token': accessToken};
 
       _logRequest(url, headers);
       Response response = await get(uri, headers: headers);
@@ -72,7 +62,7 @@ class NetworkCaller {
       Uri uri = Uri.parse(url);
       Map<String, String> headers = {
         'content-type': 'application/json',
-        'token': getx.Get.find<AuthController>().token ?? ''
+        'token': accessToken
       };
 
       _logRequest(url, headers);
@@ -88,7 +78,7 @@ class NetworkCaller {
             statusCode: response.statusCode,
             responseData: decodedResponse);
       } else if (response.statusCode == 401) {
-        await _clearUserData();
+        await onUnAuthorize();
         return NetworkResponse(
           isSuccess: false,
           statusCode: response.statusCode,
@@ -116,7 +106,7 @@ class NetworkCaller {
       Uri uri = Uri.parse(url);
       Map<String, String> headers = {
         'content-type': 'application/json',
-        'token': getx.Get.find<AuthController>().token ?? ''
+        'token': accessToken
       };
 
       _logRequest(url, headers);
@@ -131,7 +121,7 @@ class NetworkCaller {
             statusCode: response.statusCode,
             responseData: decodedResponse);
       } else if (response.statusCode == 401) {
-        await _clearUserData();
+        await onUnAuthorize();
         return NetworkResponse(
             isSuccess: false, statusCode: response.statusCode);
       } else {
@@ -153,7 +143,7 @@ class NetworkCaller {
       Uri uri = Uri.parse(url);
       Map<String, String> headers = {
         'content-type': 'application/json',
-        'token': getx.Get.find<AuthController>().token ?? ''
+        'token': accessToken
       };
 
       _logRequest(url, headers);
@@ -168,7 +158,7 @@ class NetworkCaller {
             statusCode: response.statusCode,
             responseData: decodedResponse);
       } else if (response.statusCode == 401) {
-        await _clearUserData();
+        await onUnAuthorize();
         return NetworkResponse(
             isSuccess: false, statusCode: response.statusCode);
       } else {
@@ -190,7 +180,7 @@ class NetworkCaller {
       Uri uri = Uri.parse(url);
       Map<String, String> headers = {
         'content-type': 'application/json',
-        'token': getx.Get.find<AuthController>().token ?? ''
+        'token': accessToken
       };
 
       _logRequest(url, headers);
@@ -205,7 +195,7 @@ class NetworkCaller {
             statusCode: response.statusCode,
             responseData: decodedResponse);
       } else if (response.statusCode == 401) {
-        await _clearUserData();
+        await onUnAuthorize();
         return NetworkResponse(
             isSuccess: false, statusCode: response.statusCode);
       } else {
@@ -229,9 +219,5 @@ class NetworkCaller {
   void _logResponse(String url, Response response) {
     _logger.i(
         "URL => $url\nStatus Code: ${response.statusCode}\nHeaders: ${response.headers}\nBody: ${response.body}");
-  }
-
-  Future<void> _clearUserData() async {
-    await getx.Get.find<AuthController>().clearUserData();
   }
 }

@@ -24,3 +24,7 @@ Future<void> main() async {
 
   runApp(const CraftyBay());
 }
+
+// Flutter/dart Package
+// Plugin Package (Flutter + Native code)
+// FFI Plugin Package (Flutter + c library(c, c++, go, rust))

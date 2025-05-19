@@ -27,6 +27,8 @@ dependencies:
   email_validator: ^3.0.0
   shared_preferences: ^2.5.3
   webview_flutter: ^4.10.0
+  network_client:
+    path: ../network_client
 
 dev_dependencies:
   flutter_test:
